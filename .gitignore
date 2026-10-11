@@ -1,0 +1,43 @@
+# Maven and Java build output
+target/
+out/
+*.class
+*.jar
+*.war
+*.ear
+hs_err_pid*
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# VS Code workspace settings (may contain machine-specific configuration)
+.vscode/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+*.local
+application-local.*
+application-*.local.*
+.secrets/
+secrets.*
+credentials.*
+*.pem
+*.key
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# Windows and macOS metadata
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Project-local files explicitly kept out of version control
+/project steps.txt

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Airline Check-In Demonstration Portal</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+</head>
+<body>
+<main class="page-shell">
+    <header class="site-header">
+        <div class="brand-mark" aria-hidden="true">✈</div>
+        <div>
+            <p class="eyebrow">AIRLINE SERVICES</p>
+            <h1>Check-in portal</h1>
+        </div>
+        <span class="demo-chip">DEMONSTRATION</span>
+    </header>
+
+    <section class="intro-card" aria-labelledby="welcome-title">
+        <div>
+            <p class="eyebrow">YOUR JOURNEY STARTS HERE</p>
+            <h2 id="welcome-title">Ready for takeoff?</h2>
+            <p>Look up a sample booking to review your flight, choose a seat and check in.</p>
+        </div>
+        <div class="route-art" aria-hidden="true"><span>✦</span><i></i><span>✈</span></div>
+    </section>
+
+    <section class="panel lookup-panel" aria-labelledby="lookup-title">
+        <div class="section-heading">
+            <span class="step-number">01</span>
+            <div>
+                <h2 id="lookup-title">Find your booking</h2>
+                <p>Enter the reference and surname from a sample booking.</p>
+            </div>
+        </div>
+        <form id="lookup-form" class="form-grid">
+            <label>Booking reference
+                <input id="reference" name="reference" autocomplete="off" placeholder="e.g. DEMO1001" required>
+            </label>
+            <label>Passenger surname
+                <input id="surname" name="surname" autocomplete="family-name" placeholder="e.g. Morgan" required>
+            </label>
+            <button class="primary-button" type="submit">Search booking <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="sample-hint">Try <strong>DEMO1001</strong> and <strong>Morgan</strong>.</p>
+        <p id="message" class="message" role="status" aria-live="polite"></p>
+    </section>
+
+    <section id="booking-panel" class="panel booking-panel" aria-labelledby="booking-title" hidden>
+        <div class="section-heading">
+            <span class="step-number">02</span>
+            <div>
+                <h2 id="booking-title">Your flight</h2>
+                <p>Check the details before continuing.</p>
+            </div>
+            <span id="booking-status" class="status-chip"></span>
+        </div>
+        <div class="flight-route">
+            <div><span class="eyebrow">FROM</span><strong id="origin"></strong></div>
+            <div class="route-line" aria-hidden="true"><span>✈</span></div>
+            <div class="destination"><span class="eyebrow">TO</span><strong id="destination"></strong></div>
+        </div>
+        <dl class="details-grid">
+            <div><dt>Passenger</dt><dd id="passenger"></dd></div>
+            <div><dt>Booking reference</dt><dd id="booking-reference"></dd></div>
+            <div><dt>Flight</dt><dd id="flight-number"></dd></div>
+            <div><dt>Departure</dt><dd id="departure-time"></dd></div>
+            <div><dt>Seat</dt><dd id="seat-number"></dd></div>
+        </dl>
+
+        <form id="seat-form" class="action-row" hidden>
+            <label for="seat-choice">Choose a seat</label>
+            <select id="seat-choice" name="seatNumber" required></select>
+            <button class="secondary-button" type="submit">Assign seat</button>
+        </form>
+        <form id="check-in-form" class="action-row" hidden>
+            <span class="action-copy">Seat selected? You’re ready to check in.</span>
+            <button class="primary-button" type="submit">Check in <span aria-hidden="true">→</span></button>
+        </form>
+        <p id="booking-note" class="booking-note"></p>
+
+        <article id="boarding-pass" class="boarding-pass" aria-labelledby="pass-title" hidden>
+            <div class="pass-topline"><span id="pass-title">BOARDING PASS</span><span class="demo-watermark">DEMO — NOT VALID FOR TRAVEL</span></div>
+            <div class="pass-route"><strong id="pass-origin"></strong><span aria-hidden="true">→</span><strong id="pass-destination"></strong></div>
+            <div class="pass-details">
+                <div><span>PASSENGER</span><strong id="passenger-name"></strong></div>
+                <div><span>FLIGHT</span><strong id="pass-flight"></strong></div>
+                <div><span>DATE &amp; TIME</span><strong id="pass-departure"></strong></div>
+                <div><span>SEAT</span><strong id="pass-seat"></strong></div>
+            </div>
+            <p class="pass-warning">DEMO — NOT VALID FOR TRAVEL</p>
+        </article>
+    </section>
+
+    <footer><span>Airline Check-In Demonstration Portal</span><span>Sample data only · No real travel booking</span></footer>
+</main>
+</body>
+</html>
