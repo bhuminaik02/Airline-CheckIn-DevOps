@@ -8,13 +8,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "bookings")
+@Table(name = "bookings", uniqueConstraints = @UniqueConstraint(
+        name = "uk_bookings_reference", columnNames = "booking_reference"))
 public class Booking {
 
     @Id
@@ -22,7 +26,7 @@ public class Booking {
     private Long id;
 
     @NotBlank
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String bookingReference;
 
     @NotBlank
@@ -64,14 +68,14 @@ public class Booking {
     public Booking(String bookingReference, String firstName, String surname, String flightNumber,
                    String origin, String destination, LocalDateTime departureTime,
                    String seatNumber, BookingStatus status) {
-        this.bookingReference = bookingReference;
+        this.bookingReference = normalize(bookingReference);
         this.firstName = firstName;
         this.surname = surname;
-        this.flightNumber = flightNumber;
+        this.flightNumber = normalize(flightNumber);
         this.origin = origin;
         this.destination = destination;
         this.departureTime = departureTime;
-        this.seatNumber = seatNumber;
+        this.seatNumber = normalize(seatNumber);
         this.status = status;
     }
 
@@ -121,5 +125,27 @@ public class Booking {
 
     public void setStatus(BookingStatus status) {
         this.status = status;
+    }
+
+    public void updateDetails(String firstName, String surname, String flightNumber,
+                              String origin, String destination, LocalDateTime departureTime) {
+        this.firstName = firstName;
+        this.surname = surname;
+        this.flightNumber = normalize(flightNumber);
+        this.origin = origin;
+        this.destination = destination;
+        this.departureTime = departureTime;
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void normalizeIdentifiers() {
+        bookingReference = normalize(bookingReference);
+        flightNumber = normalize(flightNumber);
+        seatNumber = normalize(seatNumber);
+    }
+
+    private static String normalize(String value) {
+        return value == null ? null : value.trim().toUpperCase(java.util.Locale.ROOT);
     }
 }

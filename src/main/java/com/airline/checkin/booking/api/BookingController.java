@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/bookings")
 public class BookingController {
@@ -21,6 +23,40 @@ public class BookingController {
 
     public BookingController(BookingService bookingService) {
         this.bookingService = bookingService;
+    }
+
+    @GetMapping
+    public List<BookingResponse> listBookings() {
+        return bookingService.listBookings();
+    }
+
+    @GetMapping("/search")
+    public List<BookingResponse> searchBookings(@RequestParam(required = false) String reference,
+                                                @RequestParam(required = false) String surname,
+                                                @RequestParam(required = false) String flightNumber) {
+        return bookingService.searchBookings(reference, surname, flightNumber);
+    }
+
+    @GetMapping("/{reference}/detail")
+    public BookingResponse getBooking(@PathVariable String reference) {
+        return bookingService.getBooking(reference);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public BookingResponse createBooking(@Valid @RequestBody BookingCreateRequest request) {
+        return bookingService.createBooking(request);
+    }
+
+    @PutMapping("/{reference}")
+    public BookingResponse updateBooking(@PathVariable String reference,
+                                         @Valid @RequestBody BookingUpdateRequest request) {
+        return bookingService.updateBooking(reference, request);
+    }
+
+    @PostMapping("/{reference}/cancel")
+    public BookingResponse cancelBooking(@PathVariable String reference) {
+        return bookingService.cancelBooking(reference);
     }
 
     @GetMapping("/{reference}")
