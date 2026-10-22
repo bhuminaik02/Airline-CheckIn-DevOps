@@ -17,7 +17,9 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.http.ClientConfig;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +49,8 @@ class SeleniumBrowserTests {
     private static final String SURNAME = "Traveler";
     private static final String SCREENSHOT_DIRECTORY = "target/selenium-output/screenshots";
     private static final Duration WAIT_TIMEOUT = Duration.ofSeconds(10);
+    private static final Duration DRIVER_START_TIMEOUT = Duration.ofSeconds(30);
+    private static final Duration DRIVER_COMMAND_TIMEOUT = Duration.ofSeconds(60);
 
     @RegisterExtension
     static final FailureScreenshotExtension FAILURE_SCREENSHOT = new FailureScreenshotExtension();
@@ -73,7 +77,21 @@ class SeleniumBrowserTests {
         if (chromeBinary != null && !chromeBinary.isBlank()) {
             options.setBinary(chromeBinary);
         }
-        driver = new ChromeDriver(options);
+        ChromeDriverService service = new ChromeDriverService.Builder()
+                .withTimeout(DRIVER_START_TIMEOUT)
+                .withLogOutput(System.out)
+                .build();
+        ClientConfig clientConfig = ClientConfig.defaultConfig()
+                .connectionTimeout(Duration.ofSeconds(15))
+                .readTimeout(DRIVER_COMMAND_TIMEOUT);
+        try {
+            driver = new ChromeDriver(service, options, clientConfig);
+        } catch (RuntimeException exception) {
+            throw new IllegalStateException("ChromeDriver or the Chrome session failed to start within the "
+                    + "configured timeouts (30 seconds for driver service startup, 60 seconds for a WebDriver "
+                    + "command). Selenium Manager network requests are limited to 45 seconds (SE_TIMEOUT); "
+                    + "check Chrome access and the Jenkins account's driver cache or network access.", exception);
+        }
         wait = new WebDriverWait(driver, WAIT_TIMEOUT);
     }
 

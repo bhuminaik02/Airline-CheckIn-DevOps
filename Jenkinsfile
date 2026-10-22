@@ -35,14 +35,17 @@ pipeline {
             }
             steps {
                 bat '''
-                    whoami
-                    where java
                     java -version
                     if not exist "%CHROME_BINARY%" (
                         echo Chrome was not found at %CHROME_BINARY% for this Jenkins agent.
                         exit /b 1
                     )
-                    "%CHROME_BINARY%" --version
+                    echo Reading Chrome version metadata without starting the browser.
+                    "%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "$ErrorActionPreference = [System.Management.Automation.ActionPreference]::Stop; $version = (Get-Item -LiteralPath $env:CHROME_BINARY -ErrorAction Stop).VersionInfo.ProductVersion; if ([string]::IsNullOrWhiteSpace($version)) { throw [System.InvalidOperationException]::new() }; Write-Output $version"
+                    if errorlevel 1 (
+                        echo Failed to read Chrome version from the installed executable metadata.
+                        exit /b 1
+                    )
                     call mvnw.cmd -B -Pselenium verify
                 '''
             }

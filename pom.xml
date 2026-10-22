@@ -95,6 +95,9 @@
                         <configuration>
                             <groups>${test.groups}</groups>
                             <reportsDirectory>${project.build.directory}/selenium-output/reports</reportsDirectory>
+                            <environmentVariables>
+                                <SE_TIMEOUT>45</SE_TIMEOUT>
+                            </environmentVariables>
                         </configuration>
                     </plugin>
                 </plugins>
