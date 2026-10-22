@@ -41,7 +41,7 @@ pipeline {
                         exit /b 1
                     )
                     echo Reading Chrome version metadata without starting the browser.
-                    "%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "$ErrorActionPreference = [System.Management.Automation.ActionPreference]::Stop; $version = (Get-Item -LiteralPath $env:CHROME_BINARY -ErrorAction Stop).VersionInfo.ProductVersion; if ([string]::IsNullOrWhiteSpace($version)) { throw [System.InvalidOperationException]::new() }; Write-Output $version"
+                    "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "$ErrorActionPreference = [System.Management.Automation.ActionPreference]::Stop; $version = (Get-Item -LiteralPath $env:CHROME_BINARY -ErrorAction Stop).VersionInfo.ProductVersion; if ([string]::IsNullOrWhiteSpace($version)) { throw [System.InvalidOperationException]::new() }; Write-Output $version"
                     if errorlevel 1 (
                         echo Failed to read Chrome version from the installed executable metadata.
                         exit /b 1
