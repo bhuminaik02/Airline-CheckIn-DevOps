@@ -2,11 +2,12 @@
 
 A fictional Spring Boot application demonstrating booking lookup, seat selection, check-in, and a demo boarding pass. This is a learning/demo project; it does not create real bookings or provide valid travel documents.
 
-The API also supports booking administration: create bookings, list and search bookings, view a booking by reference, and update passenger/flight details while a booking remains in `BOOKED` status. New bookings require a valid, currently unassigned seat and are created in `BOOKED` status. These endpoints are part of this demonstration and do not include authentication or role-based access control.
+The API also supports booking administration: create bookings, list and search bookings, view a booking by reference, and update passenger/flight details while a booking remains in `BOOKED` status. New bookings require a valid, currently unassigned seat and are created in `BOOKED` status. Management endpoints require the demo `ADMIN` or `STAFF` role. Customer booking lookup, seat selection, and check-in remain available for the public demonstration flow. Set `DEMO_ADMIN_USERNAME`, `DEMO_ADMIN_PASSWORD`, `DEMO_STAFF_USERNAME`, and `DEMO_STAFF_PASSWORD` to configure the demo management accounts.
 
 ## Requirements
 
-- Java 25 (LTS)
+- Java 21
+- Google Chrome for Selenium browser tests
 - The included Maven Wrapper (Maven is downloaded by the wrapper if needed)
 
 ## Run locally
@@ -24,6 +25,17 @@ Open [http://localhost:8080/](http://localhost:8080/) in a browser. Stop the app
 ```powershell
 .\mvnw.cmd clean test
 ```
+
+Run the ordinary API tests and the Selenium browser tests separately:
+
+```powershell
+.\mvnw.cmd clean verify
+.\mvnw.cmd -Pselenium verify
+```
+
+The browser tests start an isolated application with fictional bookings and use headless Chrome. The default Maven run excludes browser tests; the `selenium` profile runs the browser tests. Selenium Manager finds a matching ChromeDriver and downloads it when it is not cached, so internet access is needed on the first run. Set `CHROME_BINARY` if Chrome is installed in a nonstandard location.
+
+Selenium JUnit XML and text reports are written to `target/selenium-output/reports/`. Screenshots are saved in `target/selenium-output/screenshots/` when a browser test fails. Standard Maven test reports are in `target/surefire-reports/`.
 
 ## Sample booking credentials
 
